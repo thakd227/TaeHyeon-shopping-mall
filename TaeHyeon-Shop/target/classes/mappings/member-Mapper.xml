@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MemberDAO">
+
+	<resultMap type="MoneyVo" id="moneyselectAllResult">
+		<result property="custno" column="k1" />
+		<result property="custname" column="k2" />
+		<result property="grade" column="k3" />
+		<result property="price" column="k4" />
+	</resultMap>
+
+	<resultMap type="MoneyVo" id="salesSelectAllResult">
+		<result property="sdate" column="k1" />
+		<result property="pcode" column="k2" />
+		<result property="price" column="k3" />
+	</resultMap>
+
+
+	<select id="salesSelectAll1" parameterType="MoneyVo"
+		resultMap="salesSelectAllResult">
+ <![CDATA[	
+  	 select SDATE as k1, PCODE as k2 , SUM(PRICE) AS  k3 from money_tbl_02
+	 where SDATE BETWEEN  #{aa}   AND  #{bb}   
+	 GROUP  BY SDATE, PCODE  ORDER BY  SDATE, PCODE  
+    ]]>
+	</select>
+	<select id="salesSelectAll2" parameterType="MoneyVo"
+		resultMap="salesSelectAllResult">
+ <![CDATA[	
+    select SDATE as k1, PCODE as k2 , SUM(PRICE) AS  k3 
+     from  money_tbl_02 where SDATE like #{kc} || '%'  
+	GROUP  BY SDATE, PCODE  ORDER BY  SDATE, PCODE  
+    ]]>
+	</select>
+
+
+	<select id="salesSelectAll3" parameterType="MoneyVo"
+		resultMap="salesSelectAllResult">
+ <![CDATA[	
+  		 select SDATE as k1, PCODE as k2 , SUM(PRICE) AS  k3 from money_tbl_02   
+		 GROUP  BY SDATE, PCODE  ORDER BY  SDATE, PCODE  
+    ]]>
+	</select>
+
+	<insert id="insertMember" parameterType="MemberVo">
+<![CDATA[	
+	 insert  into member_tbl_02 ( custno  , custname,password, phone , address ,joindate ,grade , city, pfile ) 
+	 values (#{custno} , #{custname},#{password}, #{phone},  #{address}, #{joindate}, #{grade}, #{city}, #{pfile})
+      ]]>
+	</insert>
+
+
+	<delete id="deleteMember" parameterType="MemberVo">
+<![CDATA[	
+	 delete  from member_tbl_02 where  custno = #{custno} 
+   ]]>
+	</delete>
+
+	<select id="editMember" parameterType="MemberVo"
+		resultType="MemberVo">
+<![CDATA[	
+     select *  from member_tbl_02 where  custno = #{custno} 
+   ]]>
+	</select>
+
+	<update id="editokMember" parameterType="MemberVo">
+<![CDATA[	
+ update member_tbl_02 
+ set custname=#{custname}, password=#{password},phone=#{phone} , address=#{address} ,joindate=#{joindate} ,grade=#{grade} , city=#{city} , pfile=#{pfile} 
+ where custno =#{custno}	
+   ]]>
+	</update>
+	<select id="moneyselectAll" parameterType="MemberVo"
+		resultMap="moneyselectAllResult">
+ <![CDATA[	
+      select m1.CUSTNO as k1, m1.CUSTNAME as k2,  m1.GRADE as k3,  sum(m2.PRICE) as k4  
+	  from member_tbl_02 m1 join money_tbl_02 m2   on m1.CUSTNO = m2.CUSTNO 
+	  group by m1.CUSTNO, m1.CUSTNAME, m1.GRADE 
+	  order  by sum(m2.PRICE) desc 
+    ]]>
+	</select>
+
+	<update id="update2" parameterType="MoneyVo">
+		update money_tbl_02 set price = price + #{price} where pcode = #{pcode}
+	</update>
+
+	<select id="selectall1" parameterType="MemberVo"
+		resultType="MemberVo">
+ <![CDATA[
+	select *  from member_tbl_02   order  by   custno  desc
+    ]]>
+	</select>
+
+	<select id="selectall2" parameterType="MemberVo"
+		resultType="MemberVo">
+		select * from member_tbl_02 where 1=1
+
+		<if test="ch1== 'custname'">
+			and custname like '%' || #{ch2} || '%'
+		</if>
+		<if test="ch1== 'address'">
+			and address like '%' || #{ch2} || '%'
+		</if>
+		order by custno desc
+	</select>
+	<select id="login" parameterType="MemberVo"
+		resultType="MemberVo">
+
+		select custno, password from member_tbl_02 where custno = #{custno} and password = #{password}
+	</select>
+</mapper>
+

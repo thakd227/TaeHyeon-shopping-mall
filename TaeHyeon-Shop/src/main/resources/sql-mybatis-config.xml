@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+ <typeAliases>
+  <typeAlias type="com.majustory.k1.shop.ProductVo"   alias="ProductVo"></typeAlias>
+   <typeAlias type="com.majustory.k1.shop.MemberVo"   alias="MemberVo"></typeAlias>
+ <typeAlias type="com.majustory.k1.shop.MoneyVo"   alias="MoneyVo"></typeAlias>
+ </typeAliases>
+ 
+ <mappers>
+  <mapper resource="mappings/board-Mapper.xml" />
+  <mapper resource="mappings/member-Mapper.xml" />
+ </mappers>
+ 
+</configuration>

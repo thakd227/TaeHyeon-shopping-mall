@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardDAO">
+
+<insert id="insertBoard"  parameterType="ProductVo" >
+<![CDATA[
+    insert  into product_tbl_02 (  pcode ,  pname,  pcost ,   pdate,   petc ,   pfile,  quantity  ) 
+    values (#{pcode}, #{pname}, #{pcost} , #{pdateS}, #{petc}, #{pfile}, #{quantity} )
+    ]]> 
+</insert>
+		 
+<select  id="edit"  parameterType="ProductVo"   resultType="ProductVo">
+<![CDATA[
+         select *  from product_tbl_02 where  pcode= #{pcode}
+  ]]> 
+</select>
+
+<select  id="pcodeMaxl"  parameterType="ProductVo"   resultType="ProductVo">
+<![CDATA[
+     select max(pcode) as pcode  from product_tbl_02 order  by   pcode  desc  
+  ]]> 
+</select>
+ 
+<select  id="shopping"  parameterType="ProductVo"   resultType="ProductVo">
+<![CDATA[
+     select *  from product_tbl_02 where  pcode=#{pcode} 
+  ]]> 
+</select>
+
+<select  id="shoppingok1"  parameterType="ProductVo"   resultType="ProductVo">
+<![CDATA[
+    select *  from product_tbl_02 where  pcode=#{pcode}
+  ]]> 
+</select>
+<select  id="shoppingok2"  parameterType="ProductVo"   >
+<![CDATA[
+   update  product_tbl_02 set quantity = quantity - #{quantity}  where  pcode=#{pcode} 
+  ]]> 
+</select>
+
+<select  id="shoppingok3"  parameterType="ProductVo"  >
+<![CDATA[
+    insert  into money_tbl_02 (  custno,   salenol,   pcost,    amount,   price,    pcode,  sdate)  
+    values (#{custno} , moneyS1.NEXTVAL , #{pcost}, #{amount}, #{price}, #{pcode}, #{sdate})";
+  ]]> 
+</select>
+
+ <delete  id="productDelete"  parameterType="ProductVo"   >
+<![CDATA[
+    delete from product_tbl_02 where pcode = #{custno}
+  ]]> 
+</delete>
+ 
+
+<select id="selectBoard"  parameterType="ProductVo"   resultType="ProductVo">
+ <![CDATA[
+    select rownum, P.*  from   ( select rownum rnum, K.*  from  
+	       ( select * from  product_tbl_02 order  by  pcode desc  ) K  where rownum <=  #{endno} ) P   
+       where rnum >=  #{startno}    
+    ]]> 
+</select>
+<select id="selectCount"  parameterType="ProductVo"   resultType="Integer">
+ <![CDATA[
+      select  count(*) as tc from  product_tbl_02 
+    ]]> 
+</select>
+
+<select id="selectTop12"  parameterType="ProductVo"   resultType="ProductVo">
+ <![CDATA[
+    select rownum, P.*  from   ( select rownum rnum, K.*  from  
+	       ( select * from  product_tbl_02 order  by  pcode desc  ) K  where rownum <=  12 ) P   
+       where rnum >=  1   
+    ]]> 
+</select>
+
+</mapper>
+
+
+
